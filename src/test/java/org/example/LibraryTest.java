@@ -11,6 +11,7 @@ public class LibraryTest {
     private Book book1;
     private Book book2;
     private Book book3;
+    private Book shortBook;
     private Magazine magazine1;
 
     @BeforeEach
@@ -22,7 +23,7 @@ public class LibraryTest {
         book1 = new Book("1984", "George Orwell", 328, 15.99);
         book2 = new Book("The Hobbit", "J.R.R. Tolkien", 310, 14.99);
         book3 = new Book("Clean Code", "Robert Martin", 464, 39.99);
-
+        shortBook = new Book("Short Book", "Brian Wolf", 100, 10.99);
         // Create test magazine
         magazine1 = new Magazine("PC Magazine", 172, 6.99, 124, "December 2025");
     }
@@ -34,6 +35,7 @@ public class LibraryTest {
         book1 = null;
         book2 = null;
         book3 = null;
+        shortBook = null;
         magazine1 = null;
     }
 
@@ -122,7 +124,6 @@ public class LibraryTest {
         }
     }
 
-
     @Nested
     @DisplayName("Remove Book Tests")
     class RemoveBookTests {
@@ -186,8 +187,6 @@ public class LibraryTest {
             assertEquals(0, emptyLibrary.getAllReadableMaterial().size());
         }
     }
-
-
 
     @Nested
     @DisplayName("Integration Tests")
@@ -275,4 +274,83 @@ public class LibraryTest {
 
         }
     }
+
+    @Nested
+    @DisplayName("Pattern Matching Tests")
+    class PatternMatchingTests {
+        @Test
+        @DisplayName("Should describe book with pattern matching")
+        void shouldDescribeBook() {
+
+            String description = library.getItemDescription(book1);
+
+            assertTrue(description.startsWith("Book:"));
+            assertTrue(description.contains("1984"));
+            assertTrue(description.contains("George Orwell"));
+            assertTrue(description.contains("328 pages"));
+            assertTrue(description.contains("15.99"));
+        }
+
+        @Test
+        @DisplayName("Should describe magazine with pattern matching")
+        void shouldDescribeMagazine() {
+
+            String description = library.getItemDescription(magazine1);
+
+            assertTrue(description.startsWith("Magazine:"));
+            assertTrue(description.contains("PC Magazine"));
+            assertTrue(description.contains("124"));
+            assertTrue(description.contains("December 2025"));
+        }
+
+        @Test
+        @DisplayName("Should calculate book discount correctly")
+        void shouldCalculateBookDiscount() {
+            double discount = library.calculateDiscount(book3);
+
+            assertEquals(3.999, discount, 0.01);  // 10% of $39.99
+        }
+
+        @Test
+        @DisplayName("Should calculate magazine discount correctly")
+        void shouldCalculateMagazineDiscount() {
+
+            double discount = library.calculateDiscount(magazine1);
+
+            // Assuming magazine has getPrice() - adjust based on your implementation
+            assertTrue(discount > 0);
+        }
+
+        @Test
+        @DisplayName("Should not discount cheap books")
+        void shouldNotDiscountCheapBooks() {
+            double discount = library.calculateDiscount(book1);
+
+            assertEquals(0.0, discount, 0.01);  // No discount under $30
+        }
+
+        @Test
+        @DisplayName("Should qualify short books for express shipping")
+        void shouldQualifyShortBooksForExpress() {
+            boolean qualifies = library.qualifiesForExpressShipping(shortBook);
+            assertTrue(qualifies);  // Under 200 pages
+        }
+
+        @Test
+        @DisplayName("Should not qualify long books for express shipping")
+        void shouldNotQualifyLongBooks() {
+            boolean qualifies = library.qualifiesForExpressShipping(book2);
+            assertFalse(qualifies);  // Over 200 pages
+        }
+
+        @Test
+        @DisplayName("Should qualify current magazines for express shipping")
+        void shouldQualifyCurrentMagazines() {
+            boolean qualifies = library.qualifiesForExpressShipping(magazine1);
+
+            assertTrue(qualifies);  // Current year
+        }
+    }
+
+
 }

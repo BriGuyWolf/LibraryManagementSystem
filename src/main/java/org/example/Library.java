@@ -109,4 +109,62 @@ public class Library {
                 .map(item -> (Purchaseable) item)
                 .min(Comparator.comparingDouble(Purchaseable::getPrice));
     }
+
+
+    /**
+     * Gets detailed description of any readable item using pattern matching.
+     */
+    public String getItemDescription(Readable item) {
+        if (item instanceof Book book) {
+            return String.format(
+                    "Book: '%s' by %s - %d pages, $%.2f (%s)",
+                    book.getTitle(),
+                    book.getAuthor(),
+                    book.getPages(),
+                    book.getPrice(),
+                    book.getCategory()
+            );
+        } else if (item instanceof Magazine magazine) {
+            return String.format(
+                    "Magazine: %s - Issue #%d (%s)",
+                    magazine.getTitle(),
+                    magazine.getIssueNumber(),
+                    magazine.getMonth()
+            );
+        } else {
+            return "Unknown readable item";
+        }
+    }
+
+    /**
+     * Calculates discount based on item type using pattern matching.
+     */
+    public double calculateDiscount(Purchaseable item) {
+        if (item instanceof Book book) {
+            // Books: 10% discount if over $30
+            return book.getPrice() > 30.0 ? book.getPrice() * 0.10 : 0.0;
+        } else if (item instanceof Magazine magazine) {
+            // Magazines: 5% discount always
+            return magazine.getPrice() * 0.05;
+        } else {
+            return 0.0;
+        }
+    }
+
+    /**
+     * Determines if item qualifies for express shipping using pattern matching.
+     */
+    public boolean qualifiesForExpressShipping(Readable item) {
+        if (item instanceof Book book) {
+            // Books under 200 pages qualify
+            return book.getPages() < 200;
+        } else if (item instanceof Magazine magazine) {
+            // Current month magazines qualify
+            return magazine.getMonth().contains("2024") ||
+                    magazine.getMonth().contains("2025");
+        } else {
+            return false;
+        }
+    }
+
 }

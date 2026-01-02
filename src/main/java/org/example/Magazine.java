@@ -27,6 +27,10 @@ public class Magazine implements Readable, Purchaseable {
         return title;
     }
 
+    public String getMonth() { return month; }
+
+    public Integer getIssueNumber() { return issueNumber; }
+
     public String getDescription() {
         return title + " - " + month + ", Issue #" + issueNumber;
     }
