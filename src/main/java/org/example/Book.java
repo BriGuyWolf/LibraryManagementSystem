@@ -64,4 +64,54 @@ public class Book implements Readable, Purchaseable {
     }
 
 
+    /**
+     * Categorizes the book based on page count using modern switch expression.
+     */
+    public String getCategory() {
+        return switch (pages) {
+            case 0 -> "Invalid";
+            default -> {
+                if (pages < 100) yield "Novella";
+                else if (pages < 300) yield "Standard";
+                else if (pages < 500) yield "Long";
+                else yield "Epic";
+            }
+        };
+    }
+
+    /**
+     * Gets reading difficulty based on page count and price.
+     */
+    public String getDifficulty() {
+        return switch (getCategory()) {
+            case "Novella" -> "Easy";
+            case "Standard" -> "Moderate";
+            case "Long" -> "Challenging";
+            case "Epic" -> "Advanced";
+            default -> "Unknown";
+        };
+    }
+
+    /**
+     * Gets a recommendation message based on book properties.
+     */
+    public String getRecommendation() {
+        return switch (getCategory()) {
+            case "Novella" -> String.format(
+                    "Perfect for a quick read! Only %d pages.", pages
+            );
+            case "Standard" -> String.format(
+                    "Great choice! A %d-page journey awaits.", pages
+            );
+            case "Long" -> String.format(
+                    "Dive deep! %d pages of content to explore.", pages
+            );
+            case "Epic" -> String.format(
+                    "An epic adventure! Prepare for %d pages of immersive reading.", pages
+            );
+            default -> "Book recommendation unavailable.";
+        };
+    }
+
+
 }
