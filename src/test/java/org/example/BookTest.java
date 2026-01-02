@@ -281,6 +281,70 @@ class BookTest {
         }
     }
 
+    @Nested
+    @DisplayName("Enhanced Switch Expression Tests")
+    class SwitchExpressionTests {
 
+        @Test
+        @DisplayName("Should categorize novella correctly")
+        void shouldCategorizeNovella() {
+            Book novella = new Book("Short Story", "Author", 50, 5.99);
+            assertEquals("Novella", novella.getCategory());
+        }
+
+        @Test
+        @DisplayName("Should categorize standard book correctly")
+        void shouldCategorizeStandard() {
+            Book standard = new Book("Standard Book", "Author", 250, 15.99);
+            assertEquals("Standard", standard.getCategory());
+        }
+
+        @Test
+        @DisplayName("Should categorize long book correctly")
+        void shouldCategorizeLong() {
+            Book longBook = new Book("Long Book", "Author", 450, 25.99);
+            assertEquals("Long", longBook.getCategory());
+        }
+
+        @Test
+        @DisplayName("Should categorize epic book correctly")
+        void shouldCategorizeEpic() {
+            Book epic = new Book("Epic Saga", "Author", 800, 35.99);
+            assertEquals("Epic", epic.getCategory());
+        }
+
+        @Test
+        @DisplayName("Should determine difficulty based on category")
+        void shouldDetermineDifficulty() {
+            Book novella = new Book("Novella", "Author", 50, 5.99);
+            Book standard = new Book("Standard", "Author", 250, 15.99);
+            Book longBook = new Book("Long", "Author", 450, 25.99);
+            Book epic = new Book("Epic", "Author", 800, 35.99);
+
+            assertEquals("Easy", novella.getDifficulty());
+            assertEquals("Moderate", standard.getDifficulty());
+            assertEquals("Challenging", longBook.getDifficulty());
+            assertEquals("Advanced", epic.getDifficulty());
+        }
+
+        @Test
+        @DisplayName("Should generate appropriate recommendation")
+        void shouldGenerateRecommendation() {
+            Book novella = new Book("Quick Read", "Author", 75, 5.99);
+            String recommendation = novella.getRecommendation();
+
+            assertTrue(recommendation.contains("75 pages"));
+            assertTrue(recommendation.contains("quick read"));
+        }
+
+        @Test
+        @DisplayName("Recommendation should include page count")
+        void recommendationShouldIncludePageCount() {
+            Book book = new Book("Test Book", "Author", 328, 15.99);
+            String recommendation = book.getRecommendation();
+
+            assertTrue(recommendation.contains("328"));
+        }
+    }
 
 }
